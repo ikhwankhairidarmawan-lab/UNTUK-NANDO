@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartu Ucapan Ulang Tahun</title>
+    <style>
+        /* Mengatur latar belakang halaman */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1518;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333333;
+            overflow: hidden; /* Mencegah scrollbar muncul saat efek hati keluar */
+            position: relative;
+        }
+
+        /* Container utama untuk kartu */
+        .card {
+            background-color: #ffffff;
+            width: 90%;
+            max-width: 450px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            box-sizing: border-box;
+            z-index: 10; /* Agar kartu tetap di atas efek hati */
+        }
+
+        /* Area kotak pesan teks */
+        .message-box {
+            background-color: #f7f7f7;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+            min-height: 200px;
+            margin-bottom: 25px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Label "TO KAMU:" */
+        .label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #888888;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Isi surat/pesan ucapan */
+        .content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #444444;
+            display: inline;
+        }
+
+        /* Kursor berkedip seperti saat mengetik */
+        .cursor {
+            font-weight: 100;
+            color: #444444;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Judul Happy Birthday */
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #222222;
+            margin-bottom: 20px;
+        }
+
+        /* Tombol Send a Hug */
+        .btn-hug {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: #111111;
+            color: #ffffff;
+            border: none;
+            padding: 12px 35px;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            text-decoration: none;
+        }
+
+        .btn-hug:hover {
+            background-color: #333333;
+        }
+
+        .btn-hug:active {
+            transform: scale(0.95); /* Efek membal saat ditekan */
+        }
+
+        /* Watermark kecil di bagian bawah */
+        .watermark {
+            font-size: 11px;
+            color: #cccccc;
+            margin-top: 15px;
+        }
+
+        /* Gaya untuk elemen hati kejutan */
+        .heart-particle {
+            position: absolute;
+            color: #ff4d6d;
+            font-size: 24px;
+            pointer-events: none;
+            animation: floatUp 2s linear forwards;
+            z-index: 1;
+        }
+
+        /* Animasi hati terbang ke atas dan memudar */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(var(--random-x)) scale(var(--random-scale));
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="message-box">
+            <div class="label">To Kamu:</div>
+            <span class="content" id="typing-text"></span><span class="cursor">|</span>
+        </div>
+
+        <div class="title">Happy Birthday🎉🎉</div>
+        
+        <button class="btn-hug" id="hug-btn">
+            kejutan <span id="heart-icon">♡</span>
+        </button>
+
+        <div class="watermark">byonepercent</div>
+    </div>
+
+    <script>
+        // Teks yang akan diketik
+        const text = "Mungkin kita tidak akan pernah berhubungan lagi, mari berbahagia untuk satu sama lain. Aku tau kamu pasti bahagia tanpa aku. Kurasa hanya aku yang akan merindukan apa yang pernah kita jalani. Aku akan tetap mendoakanmu dan sangat berharap doa-doa itu menjadi kenyataan. Terima kasih telah menjadi bagian terindah dari hidupku.";
+        
+        let index = 0;
+        const speed = 50; 
+        const textContainer = document.getElementById("typing-text");
+
+        function typeWriter() {
+            if (index < text.length) {
+                textContainer.innerHTML += text.charAt(index);
+                index++;
+                setTimeout(typeWriter, speed);
+            } else {
+                document.querySelector(".cursor").style.display = "none";
+            }
+        }
+
+        window.onload = function() {
+            setTimeout(typeWriter, 1000);
+        };
+
+        // --- Fitur Kejutan (Hujan Hati) ---
+        const hugBtn = document.getElementById("hug-btn");
+        const heartIcon = document.getElementById("heart-icon");
+
+        hugBtn.addEventListener("click", () => {
+            // Mengubah ikon hati kosong menjadi hati penuh saat diklik
+            heartIcon.innerHTML = "♥";
+            heartIcon.style.color = "#ff4d6d";
+
+            // Membuat 30 elemen hati secara acak
+            for (let i = 0; i < 30; i++) {
+                createHeart();
+            }
+        });
+
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart-particle");
+            
+            // Variasi bentuk hati dan warna merah muda/merah
+            const heartTypes = ["♥", "💖", "💝", "💕", "♡"];
+            heart.innerHTML = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+            
+            // Mengatur posisi horizontal acak di layar (0% hingga 100%)
+            heart.style.left = Math.random() * 100 + "vw";
+            
+            // Mengatur waktu mulai animasi yang sedikit berbeda agar tidak barengan
+            heart.style.animationDelay = Math.random() * 0.5 + "s";
+            
+            // Mengatur variabel CSS untuk arah gerakan menyamping acak dan ukuran acak
+            const randomX = (Math.random() * 200 - 100) + "px"; // Bergeser kiri/kanan hingga 100px
+            const randomScale = Math.random() * 1.5 + 0.5;      // Ukuran 0.5x hingga 2x
+            
+            heart.style.setProperty('--random-x', randomX);
+            heart.style.setProperty('--random-scale', randomScale);
+
+            document.body.appendChild(heart);
+
+            // Hapus elemen dari dokumen setelah animasi selesai (2 detik) agar tidak memberatkan browser
+            setTimeout(() => {
+                heart.remove();
+            }, 2500);
+        }
+    </script>
+
+</body>
+</html>
